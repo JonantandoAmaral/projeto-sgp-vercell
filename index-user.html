@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro de Usuários - SGP</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="./assets/css/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="./assets/css/style.css" />
+  </head>
+  <body>
+    <div class="containerPrincipal d-flex flex-column min-vh-100">
+      <header class="containerTopo bg-primary text-white p-3">
+        <h2 class="text-center">Sistema de Gestão de Projetos - Cadastro</h2>
+      </header>
+      <main class="containerConteudo flex-fill p-4">
+        <div class="card shadow p-4" style="max-width: 600px; margin: auto">
+          <h4 class="text-center mb-4">Cadastro de Usuário</h4>
+          <form id="formCadastro">
+            <input type="hidden" id="editIndex" />
+            <div class="mb-3">
+              <label for="nome" class="form-label">Nome completo</label>
+              <input
+                type="text"
+                id="nome"
+                name="nome"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">E-mail</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="senha" class="form-label">Senha</label>
+              <input
+                type="password"
+                id="senha"
+                name="senha"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="projeto" class="form-label">Projeto</label>
+              <select id="projeto" name="projeto" class="form-select" required>
+                <option value="">Selecione um projeto</option>
+                <option value="Projeto Alpha">Projeto Alpha</option>
+                <option value="Projeto Beta">Projeto Beta</option>
+                <option value="Projeto Gamma">Projeto Gamma</option>
+              </select>
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">Salvar</button>
+            </div>
+          </form>
+        </div>
+        <div class="card shadow p-4 mt-4">
+          <h5 class="mb-3">Usuários Cadastrados</h5>
+          <table class="table table-bordered table-striped" id="tabelaUsuarios">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Projeto</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </main>
+      <footer class="containerRodape bg-light text-center p-3 mt-auto">
+        <p class="mb-0">&copy; 2025 - Sistema de Gestão de Projetos</p>
+      </footer>
+    </div>
+    <script src="./assets/js/bootstrap.bundle.min.js"></script>
+    <script>
+      function getUsuarios() {
+        return JSON.parse(localStorage.getItem("usuarios")) || [];
+      }
+      function saveUsuarios(usuarios) {
+        localStorage.setItem("usuarios", JSON.stringify(usuarios));
+      }
+      function renderUsuarios() {
+        const usuarios = getUsuarios();
+        const tbody = document.querySelector("#tabelaUsuarios tbody");
+        tbody.innerHTML = "";
+        usuarios.forEach((usuario, index) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+        <td>${usuario.nome}</td>
+        <td>${usuario.email}</td>
+        <td>${usuario.projeto}</td>
+        <td>
+          <button class="btn btn-sm btn-warning me-2" onclick="editarUsuario(${index})">Editar</button>
+          <button class="btn btn-sm btn-danger" onclick="removerUsuario(${index})">Remover</button>
+        </td>
+      `;
+          tbody.appendChild(tr);
+        });
+      }
+      document
+        .querySelector("#formCadastro")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const nome = document.querySelector("#nome").value;
+          const email = document.querySelector("#email").value;
+          const senha = document.querySelector("#senha").value;
+          const projeto = document.querySelector("#projeto").value;
+          const editIndex = document.querySelector("#editIndex").value;
+          const usuarios = getUsuarios();
+          if (editIndex) {
+            usuarios[editIndex] = { nome, email, senha, projeto };
+            document.querySelector("#editIndex").value = "";
+          } else {
+            usuarios.push({ nome, email, senha, projeto });
+          }
+          saveUsuarios(usuarios);
+          renderUsuarios();
+          this.reset();
+        });
+      function editarUsuario(index) {
+        const usuario = getUsuarios()[index];
+        document.querySelector("#nome").value = usuario.nome;
+        document.querySelector("#email").value = usuario.email;
+        document.querySelector("#senha").value = usuario.senha;
+        document.querySelector("#projeto").value = usuario.projeto;
+        document.querySelector("#editIndex").value = index;
+      }
+      function removerUsuario(index) {
+        const usuarios = getUsuarios();
+        if (confirm("Deseja realmente remover este usuário?")) {
+          usuarios.splice(index, 1);
+          saveUsuarios(usuarios);
+          renderUsuarios();
+        }
+      }
+      renderUsuarios();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SGP</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+  <script defer>
+    document.addEventListener("DOMContentLoaded", function () {
+      const ctx = document.getElementById("graficoProjetos").getContext("2d");
+
+      new Chart(ctx, {
+        type: "doughnut",
+        data: {
+          labels: ["Concluídos", "Em andamento", "Planejados"],
+          datasets: [{
+            data: [5, 8, 3],
+            backgroundColor: ["#28a745", "#ffc107", "#17a2b8"],
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="containerConteudo d-flex">
+      <div class="sidebar d-flex flex-column p-3">
+        <img src="./assets/img/sgp_logo_vertical.png" class="sgp_logo_vertical mb-4" alt="Logo Vertical">
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item"><a href="./index-dash.html" class="nav-link">Dashboard</a></li>
+          <li><a href="./index-dash.html" class="nav-link active bg-primary text-white">Tarefas</a></li>
+          <li><a href="./index-logged.html" class="nav-link">Projetos</a></li>
+          <li><a href="./index-user.html" class="nav-link">Usuários</a></li>
+        </ul>
+        <button class="btn btn-primary sgp_btn_acessar mt-auto" onclick="window.location.href='./index.html'">Logout</button>
+      </div>
+  <div class="container-fluid p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Dashboard - SGP</h2>
+      <a href="index-logged.html" class="btn btn-secondary">Voltar</a>
+    </div>
+
+    <div class="row g-4 mb-4">
+      <div class="col-md-4">
+        <div class="card text-white bg-primary">
+          <div class="card-body">
+            <h5 class="card-title">Tarefas Totais</h5>
+            <p class="card-text fs-3">24</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-white bg-success">
+          <div class="card-body">
+            <h5 class="card-title">Projetos Ativos</h5>
+            <p class="card-text fs-3">6</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-white bg-warning">
+          <div class="card-body">
+            <h5 class="card-title">Usuários Ativos</h5>
+            <p class="card-text fs-3">12</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">Distribuição de Projetos</div>
+      <div class="card-body">
+        <canvas id="graficoProjetos" height="120"></canvas>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
